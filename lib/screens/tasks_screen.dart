@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/tasks_model.dart';
+import '../widgets/task_list_builder.dart';
 
 class TasksScreen extends StatelessWidget {
   TasksScreen({super.key});
@@ -31,21 +32,7 @@ class TasksScreen extends StatelessWidget {
               label: Text('Tasks:'),
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: tasksList.length,
-              itemBuilder: (context, index) {
-                var task = tasksList[index];
-                return ListTile(
-                  title: Text(task.title),
-                  trailing: Checkbox(
-                    value: task.isDone,
-                    onChanged: (value) {},
-                  ),
-                );
-              },
-            ),
-          )
+          TasksListBuilder(tasksList: tasksList)
         ],
       ),
     );
