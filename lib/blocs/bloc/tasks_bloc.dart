@@ -16,8 +16,12 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         ),
       );
     });
+
     on<UpdateTask>(_onUpdateTask);
-    on<DeleteTask>((event, emit) {});
+
+    on<DeleteTask>((event, emit) {
+      emit(TasksState(allTasks: List.from(state.allTasks)..remove(event.task)));
+    });
   }
 
   void _onUpdateTask(UpdateTask event, Emitter<TasksState> emit) {
