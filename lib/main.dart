@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -13,6 +14,8 @@ void main() async {
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: appDocDir,
   );
+
+  log(appDocDir.toString());
 
   runApp(const MyApp());
 }
