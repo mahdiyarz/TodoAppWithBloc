@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:todo_bloc/services/app_router.dart';
 
 import '../screens/tasks_screen.dart';
 import 'blocs/bloc_exports.dart';
@@ -17,11 +18,19 @@ void main() async {
 
   log(appDocDir.toString());
 
-  runApp(const MyApp());
+  runApp(
+    MyApp(
+      appRouter: AppRouter(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AppRouter appRouter;
+  const MyApp({
+    super.key,
+    required this.appRouter,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +42,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.grey,
         ),
         home: const TasksScreen(),
+        onGenerateRoute: appRouter.onGenerateRoute,
       ),
     );
   }
