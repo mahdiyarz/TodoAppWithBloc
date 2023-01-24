@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_bloc/screens/drawer_screen.dart';
 
 import '../blocs/bloc_exports.dart';
 import '../models/tasks_model.dart';
@@ -41,12 +42,15 @@ class _TasksScreenState extends State<TasksScreen> {
               ),
             ],
           ),
+          drawer: const DrawerScreen(),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Center(
+              Center(
                 child: Chip(
-                  label: Text('Tasks:'),
+                  label: Text(
+                    'Tasks: ${state.allTasks.length}',
+                  ),
                 ),
               ),
               TasksListBuilder(tasksList: tasksList)
