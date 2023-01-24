@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../screens/recycle_bin_screen.dart';
+import '../screens/tasks_screen.dart';
+
 class DrawerScreen extends StatelessWidget {
   const DrawerScreen({super.key});
 
@@ -24,14 +27,18 @@ class DrawerScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            const ListTile(
-              leading: Icon(Icons.folder_special_rounded),
-              title: Text('My Tasks List'),
+            ListTile(
+              onTap: () =>
+                  Navigator.of(context).pushNamed(TasksScreen.routeName),
+              leading: const Icon(Icons.folder_special_rounded),
+              title: const Text('My Tasks List'),
             ),
             const Divider(),
-            const ListTile(
-              leading: Icon(Icons.folder_delete_outlined),
-              title: Text('Recycle Bin'),
+            ListTile(
+              onTap: () =>
+                  Navigator.of(context).pushNamed(RecycleBinScreen.routeName),
+              leading: const Icon(Icons.folder_delete_outlined),
+              title: const Text('Recycle Bin'),
             ),
           ],
         ),
