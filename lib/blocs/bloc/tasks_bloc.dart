@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:developer' show log;
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
@@ -11,8 +11,12 @@ part 'tasks_event.dart';
 part 'tasks_state.dart';
 
 class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
-  TasksBloc() : super(const TasksState(allTasks: [])) {
+  TasksBloc()
+      : super(
+          const TasksState(),
+        ) {
     on<AddTask>((event, emit) {
+      log('run AddTask');
       emit(
         TasksState(
           allTasks: List.from(state.allTasks)..add(event.task),
@@ -23,11 +27,13 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     on<UpdateTask>(_onUpdateTask);
 
     on<DeleteTask>((event, emit) {
+      log('run DELETE Task');
       emit(TasksState(allTasks: List.from(state.allTasks)..remove(event.task)));
     });
   }
 
   void _onUpdateTask(UpdateTask event, Emitter<TasksState> emit) {
+    log('run UpdateTask');
     final state = this.state;
     final task = event.task;
     final int index = state.allTasks.indexOf(task);
@@ -41,19 +47,15 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
 
   @override
   TasksState? fromJson(Map<String, dynamic> json) {
-    log('run fromJson on tasks_bloc: $json');
-    final allTasks = List<TaskModel>.from(
-      (json['allTasks'] as List<int>).map<TaskModel>(
-        (x) => TaskModel.fromMap(x as Map<String, dynamic>),
-      ),
-    );
-    // (json['allTasks'] as List).map((e) => TaskModel.fromMap(e as Map<String, dynamic>)).toList;
-    return TasksState(allTasks: allTasks);
+    var myTaskState = TasksState.fromMap(json);
+
+    return myTaskState;
   }
 
   @override
   Map<String, dynamic>? toJson(TasksState state) {
-    log('run toJson on tasks_bloc: $state');
-    return state.toMap();
+    var myTaskStateToJson = state.toMap();
+
+    return myTaskStateToJson;
   }
 }
