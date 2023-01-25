@@ -36,6 +36,24 @@ class DeleteTask extends TasksEvent {
 }
 
 @immutable
+class DeleteAllTasks extends TasksEvent {
+  final List<TaskModel> deletedTasks;
+  const DeleteAllTasks({required this.deletedTasks});
+
+  @override
+  List<Object> get props => [deletedTasks];
+}
+
+@immutable
+class RecycleTask extends TasksEvent {
+  final TaskModel recycleTask;
+  const RecycleTask({required this.recycleTask});
+
+  @override
+  List<Object> get props => [recycleTask];
+}
+
+@immutable
 class RemoveTask extends TasksEvent {
   final TaskModel task;
   const RemoveTask({required this.task});
