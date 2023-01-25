@@ -19,8 +19,14 @@ class RecycleBinScreen extends StatelessWidget {
             title: const Text('Recycle Bin is here'),
             actions: [
               IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.add),
+                onPressed: () {
+                  context.read<TasksBloc>().add(
+                        DeleteAllTasks(deletedTasks: removedTasks),
+                      );
+                },
+                icon: removedTasks.isNotEmpty
+                    ? const Icon(Icons.delete_rounded)
+                    : const Icon(Icons.delete_outline_rounded),
               ),
             ],
           ),
