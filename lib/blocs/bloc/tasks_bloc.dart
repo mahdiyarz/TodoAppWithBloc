@@ -17,6 +17,7 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
         ) {
     on<AddTask>((event, emit) {
       log('run AddTask');
+      final state = this.state;
       emit(
         TasksState(
           allTasks: List.from(state.allTasks)..add(event.task),
@@ -26,10 +27,22 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     });
 
     on<UpdateTask>(_onUpdateTask);
+    on<DeleteAllTasks>(_onDeleteAllTasks);
+    on<RecycleTask>(_onRecycleTask);
 
     on<DeleteTask>((event, emit) {
       log('run DELETE Task');
-      emit(TasksState(allTasks: List.from(state.allTasks)..remove(event.task)));
+      final state = this.state;
+      final task = event.task;
+      List<TaskModel> removedTasks = List.from(state.removedTasks)
+        ..remove(task);
+
+      emit(
+        TasksState(
+          allTasks: state.allTasks,
+          removedTasks: removedTasks,
+        ),
+      );
     });
 
     on<RemoveTask>(
@@ -37,10 +50,10 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
         log('run remove Task');
         final state = this.state;
         final task = event.task;
-        final int index = state.allTasks.indexOf(task);
+        // final int index = state.removedTasks.indexOf(task);
         List<TaskModel> allTasks = List.from(state.allTasks)..remove(task);
         List<TaskModel> removedTasks = List.from(state.removedTasks)
-          ..insert(index, task.copyWith(isDelete: true));
+          ..add(task.copyWith(isDelete: true));
 
         emit(
           TasksState(
@@ -62,7 +75,38 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
         ? allTasks.insert(index, task.copyWith(isDone: true))
         : allTasks.insert(index, task.copyWith(isDone: false));
 
-    emit(TasksState(allTasks: allTasks));
+    emit(
+      TasksState(
+        allTasks: allTasks,
+        removedTasks: state.removedTasks,
+      ),
+    );
+  }
+
+  void _onDeleteAllTasks(DeleteAllTasks event, Emitter<TasksState> emit) {
+    log('run Delete all tasks');
+    final state = this.state;
+    // final task = event.deletedTasks;
+    emit(
+      TasksState(
+        allTasks: state.allTasks,
+        removedTasks: const [],
+      ),
+    );
+  }
+
+  void _onRecycleTask(RecycleTask event, Emitter<TasksState> emit) {
+    log('run recycle task');
+    final state = this.state;
+    final task = event.recycleTask;
+    final int index = state.removedTasks.indexOf(task);
+    emit(
+      TasksState(
+        allTasks: List.from(state.allTasks)
+          ..insert(index, task.copyWith(isDelete: false)),
+        removedTasks: List.from(state.removedTasks)..remove(task),
+      ),
+    );
   }
 
   @override
