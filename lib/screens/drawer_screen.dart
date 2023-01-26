@@ -33,8 +33,8 @@ class DrawerScreen extends StatelessWidget {
               builder: (context, state) {
                 List<TaskModel> tasksList = state.allTasks;
                 return ListTile(
-                  onTap: () =>
-                      Navigator.of(context).pushNamed(TasksScreen.routeName),
+                  onTap: () => Navigator.of(context)
+                      .pushReplacementNamed(TasksScreen.routeName),
                   leading: const Icon(Icons.folder_special_rounded),
                   trailing: Text(tasksList.length.toString()),
                   title: const Text('My Tasks List'),
@@ -47,7 +47,7 @@ class DrawerScreen extends StatelessWidget {
                 List<TaskModel> removedList = state.removedTasks;
                 return ListTile(
                   onTap: () => Navigator.of(context)
-                      .pushNamed(RecycleBinScreen.routeName),
+                      .pushReplacementNamed(RecycleBinScreen.routeName),
                   leading: const Icon(Icons.folder_delete_outlined),
                   trailing: Text(removedList.length.toString()),
                   title: const Text('Recycle Bin'),
