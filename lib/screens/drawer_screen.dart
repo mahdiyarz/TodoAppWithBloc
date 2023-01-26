@@ -8,6 +8,8 @@ import '../screens/tasks_screen.dart';
 class DrawerScreen extends StatelessWidget {
   const DrawerScreen({super.key});
 
+  final switchValue = false;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -54,6 +56,18 @@ class DrawerScreen extends StatelessWidget {
                 );
               },
             ),
+            BlocBuilder<SwitchBloc, SwitchState>(
+              builder: (context, state) {
+                return Switch(
+                  value: state.switchValue,
+                  onChanged: (newValue) {
+                    newValue
+                        ? context.read<SwitchBloc>().add(SwitchOnEvent())
+                        : context.read<SwitchBloc>().add(SwitchOffEvent());
+                  },
+                );
+              },
+            )
           ],
         ),
       ),
