@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todo_bloc/blocs/bloc_exports.dart';
 import 'package:todo_bloc/models/tasks_model.dart';
+import 'package:todo_bloc/screens/tab_screen.dart';
 
 import '../screens/recycle_bin_screen.dart';
-import '../screens/tasks_screen.dart';
 
 class DrawerScreen extends StatelessWidget {
   const DrawerScreen({super.key});
@@ -36,7 +36,7 @@ class DrawerScreen extends StatelessWidget {
                 List<TaskModel> tasksList = state.allTasks;
                 return ListTile(
                   onTap: () => Navigator.of(context)
-                      .pushReplacementNamed(TasksScreen.routeName),
+                      .pushReplacementNamed(TabScreen.routeName),
                   leading: const Icon(Icons.folder_special_rounded),
                   trailing: Text(tasksList.length.toString()),
                   title: const Text('My Tasks List'),
