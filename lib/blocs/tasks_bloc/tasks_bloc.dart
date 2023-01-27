@@ -20,7 +20,8 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
       final state = this.state;
       emit(
         TasksState(
-          allTasks: List.from(state.allTasks)..add(event.task),
+          pendingTasks: List.from(state.pendingTasks)..add(event.task),
+          completeTasks: state.completeTasks,
           removedTasks: state.removedTasks,
         ),
       );
@@ -39,7 +40,9 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
 
       emit(
         TasksState(
-          allTasks: state.allTasks,
+          pendingTasks: state.pendingTasks,
+          completeTasks: state.completeTasks,
+          favoriteTasks: state.favoriteTasks,
           removedTasks: removedTasks,
         ),
       );
@@ -51,13 +54,26 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
         final state = this.state;
         final task = event.task;
         // final int index = state.removedTasks.indexOf(task);
-        List<TaskModel> allTasks = List.from(state.allTasks)..remove(task);
+        List<TaskModel> pendingTasks = List.from(state.pendingTasks)
+          ..remove(task);
+        List<TaskModel> completeTasks = List.from(state.completeTasks)
+          ..remove(task);
+        List<TaskModel> favoriteTasks = List.from(state.favoriteTasks)
+          ..remove(task);
         List<TaskModel> removedTasks = List.from(state.removedTasks)
-          ..add(task.copyWith(isDelete: true));
+          ..insert(
+            0,
+            task.copyWith(
+              isDelete: true,
+              isDone: false,
+            ),
+          );
 
         emit(
           TasksState(
-            allTasks: allTasks,
+            pendingTasks: pendingTasks,
+            completeTasks: completeTasks,
+            favoriteTasks: favoriteTasks,
             removedTasks: removedTasks,
           ),
         );
@@ -69,15 +85,25 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     log('run UpdateTask');
     final state = this.state;
     final task = event.task;
-    final int index = state.allTasks.indexOf(task);
-    List<TaskModel> allTasks = List.from(state.allTasks)..remove(task);
+    // final int index = state.pendingTasks.indexOf(task);
+    List<TaskModel> pendingTasks = List.from(state.pendingTasks);
+    List<TaskModel> completeTasks = List.from(state.completeTasks);
+
     task.isDone == false
-        ? allTasks.insert(index, task.copyWith(isDone: true))
-        : allTasks.insert(index, task.copyWith(isDone: false));
+        ? {
+            completeTasks.insert(0, task.copyWith(isDone: true)),
+            pendingTasks.remove(task),
+          }
+        : {
+            completeTasks.remove(task),
+            pendingTasks.insert(0, task.copyWith(isDone: false)),
+          };
 
     emit(
       TasksState(
-        allTasks: allTasks,
+        pendingTasks: pendingTasks,
+        completeTasks: completeTasks,
+        favoriteTasks: state.favoriteTasks,
         removedTasks: state.removedTasks,
       ),
     );
@@ -89,7 +115,9 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     // final task = event.deletedTasks;
     emit(
       TasksState(
-        allTasks: state.allTasks,
+        pendingTasks: state.pendingTasks,
+        completeTasks: state.completeTasks,
+        favoriteTasks: state.favoriteTasks,
         removedTasks: const [],
       ),
     );
@@ -100,11 +128,22 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     final state = this.state;
     final task = event.recycleTask;
     final int index = state.removedTasks.indexOf(task);
+    List<TaskModel> pendingTasks = List.from(state.pendingTasks)
+      ..insert(
+        index,
+        task.copyWith(
+          isDelete: false,
+          isDone: false,
+        ),
+      );
+    List<TaskModel> removedTasks = List.from(state.removedTasks)..remove(task);
+
     emit(
       TasksState(
-        allTasks: List.from(state.allTasks)
-          ..insert(index, task.copyWith(isDelete: false)),
-        removedTasks: List.from(state.removedTasks)..remove(task),
+        pendingTasks: pendingTasks,
+        completeTasks: state.completeTasks,
+        favoriteTasks: state.favoriteTasks,
+        removedTasks: removedTasks,
       ),
     );
   }

@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
 
+import '../blocs/bloc_exports.dart';
+import '../models/tasks_model.dart';
+import '../widgets/task_list_builder.dart';
+
 class CompleteTasksScreen extends StatelessWidget {
   const CompleteTasksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return BlocBuilder<TasksBloc, TasksState>(
+      builder: (context, state) {
+        List<TaskModel> tasksList = state.completeTasks;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Chip(
+                label: Text(
+                  'Tasks: ${state.pendingTasks.length}',
+                ),
+              ),
+            ),
+            TasksListBuilder(tasksList: tasksList)
+          ],
+        );
+      },
+    );
   }
 }

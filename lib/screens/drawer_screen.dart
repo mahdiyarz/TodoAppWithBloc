@@ -33,7 +33,7 @@ class DrawerScreen extends StatelessWidget {
             ),
             BlocBuilder<TasksBloc, TasksState>(
               builder: (context, state) {
-                List<TaskModel> tasksList = state.allTasks;
+                List<TaskModel> tasksList = state.pendingTasks;
                 return ListTile(
                   onTap: () => Navigator.of(context)
                       .pushReplacementNamed(TabScreen.routeName),
