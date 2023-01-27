@@ -70,3 +70,20 @@ class FavoriteTask extends TasksEvent {
   @override
   List<Object> get props => [favoriteTask];
 }
+
+@immutable
+class EditTask extends TasksEvent {
+  final TaskModel oldTask;
+  final TaskModel newTask;
+
+  const EditTask({
+    required this.oldTask,
+    required this.newTask,
+  });
+
+  @override
+  List<Object> get props => [
+        oldTask,
+        newTask,
+      ];
+}

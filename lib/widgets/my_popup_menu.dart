@@ -5,11 +5,15 @@ class MyPopupMenu extends StatelessWidget {
   final TaskModel task;
   final VoidCallback cancelOrDeleteCallback;
   final VoidCallback likeOrDislikeCallback;
+  final VoidCallback editTaskCallback;
+  final VoidCallback restoreTaskCallback;
   const MyPopupMenu({
     Key? key,
     required this.task,
     required this.cancelOrDeleteCallback,
     required this.likeOrDislikeCallback,
+    required this.editTaskCallback,
+    required this.restoreTaskCallback,
   }) : super(key: key);
 
   @override
@@ -18,8 +22,9 @@ class MyPopupMenu extends StatelessWidget {
       itemBuilder: task.isDelete == false
           ? (context) => [
                 PopupMenuItem(
+                  onTap: null,
                   child: TextButton.icon(
-                    onPressed: () {},
+                    onPressed: editTaskCallback,
                     icon: const Icon(Icons.edit),
                     label: const Text('Edit'),
                   ),
@@ -47,15 +52,17 @@ class MyPopupMenu extends StatelessWidget {
               ]
           : (context) => [
                 PopupMenuItem(
+                  onTap: restoreTaskCallback,
                   child: TextButton.icon(
-                    onPressed: () {},
+                    onPressed: null,
                     icon: const Icon(Icons.restore_from_trash),
                     label: const Text('Restore task'),
                   ),
                 ),
                 PopupMenuItem(
+                  onTap: cancelOrDeleteCallback,
                   child: TextButton.icon(
-                    onPressed: () {},
+                    onPressed: null,
                     icon: const Icon(Icons.delete_forever),
                     label: const Text('Delete forever'),
                   ),

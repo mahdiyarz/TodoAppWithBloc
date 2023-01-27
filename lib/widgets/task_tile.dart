@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:todo_bloc/screens/edit_task_screen.dart';
 
 import '../blocs/bloc_exports.dart';
 import '../models/tasks_model.dart';
@@ -19,6 +20,20 @@ class TaskTile extends StatelessWidget {
     } else {
       return ctx.read<TasksBloc>().add(RemoveTask(task: taskModel));
     }
+  }
+
+  void _editTask(BuildContext context, TaskModel task) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => SingleChildScrollView(
+        child: Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: EditTaskScreen(oldTask: task),
+        ),
+      ),
+    );
   }
 
   @override
@@ -56,6 +71,12 @@ class TaskTile extends StatelessWidget {
         cancelOrDeleteCallback: () => _removeOrDeleteTask(context, task),
         likeOrDislikeCallback: () =>
             context.read<TasksBloc>().add(FavoriteTask(favoriteTask: task)),
+        editTaskCallback: () {
+          Navigator.of(context).pop();
+          _editTask(context, task);
+        },
+        restoreTaskCallback: () =>
+            context.read<TasksBloc>().add(RecycleTask(recycleTask: task)),
       ),
       // onLongPress: () => _removeOrDeleteTask(context, task),
     );
