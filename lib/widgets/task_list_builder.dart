@@ -26,6 +26,10 @@ class TasksListBuilder extends StatelessWidget {
                       TextSpan(
                         children: [
                           TextSpan(
+                            text: e.title,
+                          ),
+                          const TextSpan(text: '\n\nDescription:\n'),
+                          TextSpan(
                             text: e.description,
                           )
                         ],

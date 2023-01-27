@@ -61,3 +61,12 @@ class RemoveTask extends TasksEvent {
   @override
   List<Object> get props => [task];
 }
+
+@immutable
+class FavoriteTask extends TasksEvent {
+  final TaskModel favoriteTask;
+  const FavoriteTask({required this.favoriteTask});
+
+  @override
+  List<Object> get props => [favoriteTask];
+}

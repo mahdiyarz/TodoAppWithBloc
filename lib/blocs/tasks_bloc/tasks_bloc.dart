@@ -30,6 +30,7 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     on<UpdateTask>(_onUpdateTask);
     on<DeleteAllTasks>(_onDeleteAllTasks);
     on<RecycleTask>(_onRecycleTask);
+    on<FavoriteTask>(_onFavoriteTask);
 
     on<DeleteTask>((event, emit) {
       log('run DELETE Task');
@@ -144,6 +145,54 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
         completeTasks: state.completeTasks,
         favoriteTasks: state.favoriteTasks,
         removedTasks: removedTasks,
+      ),
+    );
+  }
+
+  void _onFavoriteTask(FavoriteTask event, Emitter<TasksState> emit) {
+    log('run favorite task');
+    final state = this.state;
+    final task = event.favoriteTask;
+    List<TaskModel> pendingTasks = List.from(state.pendingTasks);
+    List<TaskModel> completeTasks = List.from(state.completeTasks);
+    List<TaskModel> favoriteTasks = List.from(state.favoriteTasks);
+
+    if (task.isDone == false) {
+      if (task.isFavorite == false) {
+        final int index = pendingTasks.indexOf(task);
+        pendingTasks
+          ..remove(task)
+          ..insert(index, task.copyWith(isFavorite: true));
+        favoriteTasks.insert(0, task.copyWith(isFavorite: true));
+      } else {
+        final int index = pendingTasks.indexOf(task);
+        pendingTasks
+          ..remove(task)
+          ..insert(index, task.copyWith(isFavorite: false));
+        favoriteTasks.remove(task);
+      }
+    } else {
+      if (task.isFavorite == false) {
+        final int index = completeTasks.indexOf(task);
+        completeTasks
+          ..remove(task)
+          ..insert(index, task.copyWith(isFavorite: true));
+        favoriteTasks.insert(0, task.copyWith(isFavorite: true));
+      } else {
+        final int index = completeTasks.indexOf(task);
+        completeTasks
+          ..remove(task)
+          ..insert(index, task.copyWith(isFavorite: false));
+        favoriteTasks.remove(task);
+      }
+    }
+
+    emit(
+      TasksState(
+        pendingTasks: pendingTasks,
+        completeTasks: completeTasks,
+        favoriteTasks: favoriteTasks,
+        removedTasks: state.removedTasks,
       ),
     );
   }

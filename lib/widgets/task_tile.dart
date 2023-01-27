@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
 
 import '../blocs/bloc_exports.dart';
 import '../models/tasks_model.dart';
+import 'my_popup_menu.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({
@@ -21,9 +23,10 @@ class TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    var listTile = ListTile(
       title: Text(
         task.title,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           decoration: task.isDone! ? TextDecoration.lineThrough : null,
           color: task.isDone! ? Colors.grey : Colors.black,
@@ -42,7 +45,20 @@ class TaskTile extends StatelessWidget {
                 context.read<TasksBloc>().add(UpdateTask(task: task));
               },
             ),
-      onLongPress: () => _removeOrDeleteTask(context, task),
+      subtitle: Text(
+        intl.DateFormat()
+            .add_yMEd()
+            .add_Hms()
+            .format(DateTime.parse(task.date)),
+      ),
+      leading: MyPopupMenu(
+        task: task,
+        cancelOrDeleteCallback: () => _removeOrDeleteTask(context, task),
+        likeOrDislikeCallback: () =>
+            context.read<TasksBloc>().add(FavoriteTask(favoriteTask: task)),
+      ),
+      // onLongPress: () => _removeOrDeleteTask(context, task),
     );
+    return listTile;
   }
 }
