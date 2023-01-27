@@ -128,10 +128,10 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     log('run recycle task');
     final state = this.state;
     final task = event.recycleTask;
-    final int index = state.removedTasks.indexOf(task);
+
     List<TaskModel> pendingTasks = List.from(state.pendingTasks)
       ..insert(
-        index,
+        0,
         task.copyWith(
           isDelete: false,
           isDone: false,

@@ -34,11 +34,15 @@ class RecycleBinScreen extends StatelessWidget {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Center(
+              Center(
                 child: Chip(
-                  label: Text(
-                    'Tasks: ',
-                  ),
+                  label: removedTasks.length > 1
+                      ? Text(
+                          '${removedTasks.length} tasks has been removed',
+                        )
+                      : Text(
+                          '${removedTasks.length} task has been removed',
+                        ),
                 ),
               ),
               TasksListBuilder(

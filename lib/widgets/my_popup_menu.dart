@@ -28,8 +28,12 @@ class MyPopupMenu extends StatelessWidget {
                   onTap: likeOrDislikeCallback,
                   child: TextButton.icon(
                     onPressed: null,
-                    icon: const Icon(Icons.bookmark),
-                    label: const Text('Add to bookmark'),
+                    icon: task.isFavorite == true
+                        ? const Icon(Icons.bookmark_border)
+                        : const Icon(Icons.bookmark_add),
+                    label: task.isFavorite == true
+                        ? const Text('Remove from\nbookmark')
+                        : const Text('Add to\nbookmark'),
                   ),
                 ),
                 PopupMenuItem(

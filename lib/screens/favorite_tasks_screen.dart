@@ -17,9 +17,13 @@ class FavoriteTasksScreen extends StatelessWidget {
           children: [
             Center(
               child: Chip(
-                label: Text(
-                  'Tasks: ${state.pendingTasks.length}',
-                ),
+                label: tasksList.length > 1
+                    ? Text(
+                        '${tasksList.length} tasks are bookmarked',
+                      )
+                    : Text(
+                        '${tasksList.length} task is bookmarked',
+                      ),
               ),
             ),
             TasksListBuilder(tasksList: tasksList)
